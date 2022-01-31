@@ -1,0 +1,29 @@
+﻿@page "/viewcopyrightimage"
+@using System.Security.Claims
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<style>
+img {
+  max-width: 100%;
+  height: auto;
+}
+</style>
+
+<h3>Your Copyrighted Image</h3>
+<p>@imageURL</p>
+<div>
+    <img src=@imageURL>
+</div>
+
+@code {
+    private string imageURL;
+
+    protected override async Task OnInitializedAsync()
+    { 
+        AuthenticationState authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        ClaimsPrincipal thisUser = authState.User;
+        imageURL = thisUser.FindFirst(c => c.Type == "imagefile")?.Value;
+
+    }
+
+}

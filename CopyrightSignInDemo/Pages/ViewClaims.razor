@@ -1,0 +1,26 @@
+﻿@page "/viewclaims"
+@using System.Security.Claims
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<h3>View Claims</h3>
+@foreach(string thisClaim in myClaims)
+{
+    <p>@thisClaim</p>
+}
+
+@code {
+    private List<string> myClaims = new List<string>();
+
+
+    protected override async Task OnInitializedAsync()
+    { 
+        AuthenticationState authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        ClaimsPrincipal thisUser = authState.User;
+        foreach(Claim myClaim in thisUser.Claims)
+        {
+            myClaims.Add(myClaim.Type + ":" + myClaim.Value.ToString());
+        }
+
+    }
+
+}
